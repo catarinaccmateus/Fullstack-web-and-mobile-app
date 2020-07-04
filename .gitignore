@@ -1,0 +1,41 @@
+Project-Frontend-Mobile/node_modules/**/*
+Project-Frontend-Mobile/.expo/*
+Project-Frontend-Mobile/npm-debug.*
+Project-Frontend-Mobile/*.jks
+Project-Frontend-Mobile/*.p8
+Project-Frontend-Mobile/*.p12
+Project-Frontend-Mobile/*.key
+Project-Frontend-Mobile/*.mobileprovision
+Project-Frontend-Mobile/*.orig.*
+Project-Frontend-Mobile/web-build/
+
+# macOS
+Project-Frontend-Mobile/.DS_Store
+
+
+
+##BACK-END
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+Project-Backend/node_modules
+Project-Backend/.pnp
+Project-Backend/.pnp.js
+
+# testing
+Project-Backend/coverage
+
+# production
+Project-Backend/build
+
+# misc
+Project-Backend/.env
+Project-Backend/.DS_Store
+Project-Backend/.env.local
+Project-Backend/.env.development.local
+Project-Backend/.env.test.local
+Project-Backend/.env.production.local
+
+Project-Backend/npm-debug.log*
+Project-Backend/yarn-debug.log*
+Project-Backend/yarn-error.log*
