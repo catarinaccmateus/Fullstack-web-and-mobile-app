@@ -4,20 +4,21 @@ import { format } from "date-fns";
 
 import styles from "./styles";
 
-import iconDefault from "./../../assets/default.png";
+//ICONS COLLECTION
+import typeIcons from "./../../utils/typeIcons";
 
-export default function TaskCard({ done, when, title }) {
+export default function TaskCard({ done, when, title, type }) {
   return (
     <TouchableOpacity style={[styles.card, done && styles.done]}>
       <View style={styles.cardLeft}>
-        <Image source={iconDefault} style={styles.typeActive} />
+        <Image source={typeIcons[type]} style={styles.typeActive} />
         <Text style={styles.cardTitle}>{title}</Text>
       </View>
       <View style={styles.cardRight}>
         <Text style={styles.cardDate}>
-          {format(newDate(when), "dd/MM/yyyy")}
+          {format(new Date(when), "dd/MM/yyyy")}
         </Text>
-        <Text style={styles.cardTime}>{format(newDate(when), "HH:mm")}</Text>
+        <Text style={styles.cardTime}>{format(new Date(when), "HH:mm")}</Text>
       </View>
     </TouchableOpacity>
   );

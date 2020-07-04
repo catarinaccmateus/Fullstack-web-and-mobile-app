@@ -21,22 +21,40 @@ export default function Home() {
   const [filter, setFilter] = useState("today");
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
+  const [lateCount, setLateCount] = useState("");
 
   async function loadTasks() {
     setLoad(true);
-    await api.get("/task/filter/all/11:11").then((response) => {
+    await api.get(`/task/filter/${filter}/11:11`).then((response) => {
       setTasks(response.data);
       setLoad(false);
     });
   }
 
+  async function lateVerify() {
+    setLoad(true);
+    await api.get(`/task/filter/late/11:11`).then((response) => {
+      setLateCount(response.data.length);
+    });
+  }
+
+  function Notification() {
+    setFilter("late");
+  }
+
   useEffect(() => {
     loadTasks();
-  }, []);
+    lateVerify();
+  }, [filter]);
 
   return (
     <View style={styles.container}>
-      <Header showNotification={true} showBack={false} />
+      <Header
+        showNotification={true}
+        showBack={false}
+        pressNotification={Notification}
+        late={lateCount}
+      />
 
       <View style={styles.filter}>
         <TouchableOpacity onPress={() => setFilter("all")}>
@@ -101,7 +119,9 @@ export default function Home() {
       </View>
 
       <View style={styles.title}>
-        <Text style={styles.titleText}>TASKS</Text>
+        <Text style={styles.titleText}>
+          {filter === "late" && "LATE "}TASKS
+        </Text>
       </View>
 
       <ScrollView
@@ -111,8 +131,14 @@ export default function Home() {
         {load ? (
           <ActivityIndicator color="#EE6B26" size={50} />
         ) : (
-          tasks.map((task) => 
-          <TaskCard done={task.done} when={task.when} title={task.title} type={task.type} />)
+          tasks.map((task) => (
+            <TaskCard
+              done={task.done}
+              when={task.when}
+              title={task.title}
+              type={task.type}
+            />
+          ))
         )}
       </ScrollView>
 
