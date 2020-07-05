@@ -17,23 +17,38 @@ import TaskCard from "./../../components/TaskCard";
 //API
 import api from "./../../services/api";
 
-export default function Home() {
+//IMPORT EXPO NETWORK TO GET MAC-ADDRESS
+import * as Network from "expo-network";
+
+export default function Home({ navigation }) {
   const [filter, setFilter] = useState("today");
   const [tasks, setTasks] = useState([]);
   const [load, setLoad] = useState(false);
   const [lateCount, setLateCount] = useState("");
+  const [macaddress, setMacaddress] = useState("");
 
   async function loadTasks() {
     setLoad(true);
-    await api.get(`/task/filter/${filter}/11:11`).then((response) => {
-      setTasks(response.data);
-      setLoad(false);
-    });
+    console.log("macaddess:« ", macaddress, "on load tasks");
+    if (macaddress) {
+      await api
+        .get(`/task/filter/${filter}/${macaddress}`)
+        .then((response) => {
+          console.log("response", response.data);
+          setTasks(response.data);
+          setLoad(false);
+        })
+        .catch((Err) => {
+          console.log("error loading tasks", Err);
+        });
+    }
   }
 
   async function lateVerify() {
     setLoad(true);
-    await api.get(`/task/filter/late/11:11`).then((response) => {
+    console.log("late verify");
+    await api.get(`/task/filter/late/${macaddress}`).then((response) => {
+      console.log("RESPONSE", response.data);
       setLateCount(response.data.length);
     });
   }
@@ -42,10 +57,27 @@ export default function Home() {
     setFilter("late");
   }
 
+  function New() {
+    navigation.navigate("Task");
+  }
+
+  function Show(id) {
+    navigation.navigate("Task", { taskId: id });
+  }
+
+  async function getMacAddress() {
+    if (!macaddress) {
+      const macaddress1 = await Network.getMacAddressAsync();
+      await setMacaddress(macaddress1);
+    }
+  }
+
   useEffect(() => {
-    loadTasks();
-    lateVerify();
-  }, [filter]);
+    getMacAddress().then(() => {
+      loadTasks();
+      lateVerify();
+    });
+  }, [filter, macaddress]);
 
   return (
     <View style={styles.container}>
@@ -137,12 +169,15 @@ export default function Home() {
               when={task.when}
               title={task.title}
               type={task.type}
+              onPress={() => {
+                Show(task._id);
+              }}
             />
           ))
         )}
       </ScrollView>
 
-      <Footer icon={"add"} />
+      <Footer icon={"add"} onPress={New} />
     </View>
   );
 }

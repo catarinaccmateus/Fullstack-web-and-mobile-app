@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    alignContent: "flex-start",
+    alignContent: "center",
     justifyContent: "flex-start",
   },
   imageIcon: {
@@ -62,6 +62,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 10,
+    marginBottom: 50,
+  },
+  typeIconInactive: {
+    opacity: 0.5,
   },
 });
 
